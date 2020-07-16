@@ -16,8 +16,14 @@ import { Feather } from '@expo/vector-icons'
 
 import TextInput from '../../components/TextInput'
 
+import { observer } from 'mobx-react-lite'
+
+import { useMst } from '../../models/Root'
+
 export default function Login ({ navigation }) {
   const [email, setEmail] = useState('')
+
+  const { auth } = useMst()
 
   return (
     <KeyboardAvoidingView

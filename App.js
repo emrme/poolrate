@@ -2,9 +2,16 @@ import { StatusBar } from 'expo-status-bar'
 import React from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 import RootNavigator from './src/navigation/RootNavigator'
+import 'mobx-react-lite/batchingForReactNative'
+
+import { Provider, rootStore } from './src/models/Root'
 
 export default function App () {
-  return <RootNavigator></RootNavigator>
+  return (
+    <Provider value={rootStore}>
+      <RootNavigator></RootNavigator>
+    </Provider>
+  )
 }
 
 const styles = StyleSheet.create({

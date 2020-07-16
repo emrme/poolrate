@@ -9,11 +9,16 @@ enableScreens()
 
 import WelcomeScreen from '../screens/Login/Welcome'
 import ConfirmEmailScreen from '../screens/Login/ConfirmEmail'
-
+import HomeScreen from '../screens/Home'
 import colors from '../constants/colors'
+import { observer } from 'mobx-react-lite'
+import { useMst } from '../models/Root'
+
 const Stack = createStackNavigator()
 
 const RootNavigator = () => {
+  const { auth } = useMst()
+
   return (
     <NavigationContainer>
       <Stack.Navigator
@@ -32,21 +37,63 @@ const RootNavigator = () => {
               name='Login'
               component={WelcomeScreen}
               options={({ navigation, route }) => {
-                return {}
+                return {
+                  headerTitle: null,
+                  headerLeft: () => {
+                    return (
+                      <TouchableOpacity
+                        style={{ marginLeft: 16 }}
+                        onPress={() => {
+                          if (navigation.canGoBack()) {
+                            navigation.popToTop()
+                          }
+                        }}
+                      >
+                        <Feather name='arrow-left' size={24} />
+                      </TouchableOpacity>
+                    )
+                  }
+                }
               }}
             ></Stack.Screen>
             <Stack.Screen
               name='ConfirmEmail'
               component={ConfirmEmailScreen}
               options={({ navigation, route }) => {
-                return {}
+                return {
+                  headerTitle: null,
+                  headerLeft: () => {
+                    return (
+                      <TouchableOpacity
+                        style={{ marginLeft: 16 }}
+                        onPress={() => {
+                          if (navigation.canGoBack()) {
+                            navigation.popToTop()
+                          }
+                        }}
+                      >
+                        <Feather name='arrow-left' size={24} />
+                      </TouchableOpacity>
+                    )
+                  }
+                }
               }}
             ></Stack.Screen>
           </>
-        ) : null}
+        ) : (
+          <>
+            <Stack.Screen
+              name='Home'
+              component={HomeScreen}
+              options={({ navigation, route }) => {
+                return { headerShown: false }
+              }}
+            ></Stack.Screen>
+          </>
+        )}
       </Stack.Navigator>
     </NavigationContainer>
   )
 }
 
-export default RootNavigator
+export default observer(RootNavigator)
