@@ -20,6 +20,16 @@ import { observer } from 'mobx-react-lite'
 
 import { useMst } from '../../models/Root'
 
+import { Magic } from '@magic-sdk/react-native'
+
+import getEnvVars from '../../../env.js'
+const { MAGIC_API_KEY } = getEnvVars()
+
+const magic = new Magic(MAGIC_API_KEY, {
+  network: 'rinkeby'
+})
+console.log('magic: ', magic)
+
 export default function Login ({ navigation }) {
   const [email, setEmail] = useState('')
 
