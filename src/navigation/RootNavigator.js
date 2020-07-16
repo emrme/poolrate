@@ -7,14 +7,13 @@ import { Feather } from '@expo/vector-icons'
 import { enableScreens } from 'react-native-screens'
 enableScreens()
 
-import LoginScreen from '../screens/Login'
+import WelcomeScreen from '../screens/Login/Welcome'
+import ConfirmEmailScreen from '../screens/Login/ConfirmEmail'
 
 import colors from '../constants/colors'
 const Stack = createStackNavigator()
 
 const RootNavigator = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false)
-
   return (
     <NavigationContainer>
       <Stack.Navigator
@@ -27,29 +26,24 @@ const RootNavigator = () => {
           }
         }}
       >
-        <Stack.Screen
-          name='Login'
-          component={LoginScreen}
-          options={({ navigation, route }) => {
-            return {
-              headerTitle: null,
-              headerLeft: () => {
-                return (
-                  <TouchableOpacity
-                    style={{ marginLeft: 16 }}
-                    onPress={() => {
-                      if (navigation.canGoBack()) {
-                        navigation.popToTop()
-                      }
-                    }}
-                  >
-                    <Feather name='arrow-left' size={24} />
-                  </TouchableOpacity>
-                )
-              }
-            }
-          }}
-        ></Stack.Screen>
+        {true ? (
+          <>
+            <Stack.Screen
+              name='Login'
+              component={WelcomeScreen}
+              options={({ navigation, route }) => {
+                return {}
+              }}
+            ></Stack.Screen>
+            <Stack.Screen
+              name='ConfirmEmail'
+              component={ConfirmEmailScreen}
+              options={({ navigation, route }) => {
+                return {}
+              }}
+            ></Stack.Screen>
+          </>
+        ) : null}
       </Stack.Navigator>
     </NavigationContainer>
   )

@@ -10,13 +10,13 @@ import {
   Platform,
   SafeAreaView
 } from 'react-native'
-import { FONT_WEIGHT } from '../constants/fonts'
-import colors from '../constants/colors'
+import { FONT_WEIGHT } from '../../constants/fonts'
+import colors from '../../constants/colors'
 import { Feather } from '@expo/vector-icons'
 
-import TextInput from '../components/TextInput'
+import TextInput from '../../components/TextInput'
 
-export default function Login () {
+export default function Login ({ navigation }) {
   const [email, setEmail] = useState('')
 
   return (
@@ -45,7 +45,12 @@ export default function Login () {
                 justifyContent: 'flex-end'
               }}
             >
-              <TouchableOpacity style={styles.roundButton}>
+              <TouchableOpacity
+                style={styles.roundButton}
+                onPress={() => {
+                  navigation.navigate('ConfirmEmail')
+                }}
+              >
                 <Feather
                   name='chevron-right'
                   size={24}
