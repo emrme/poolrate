@@ -9,10 +9,10 @@ const TextInput = props => {
       placeholder='Email address'
       onFocus={() => {}}
       onBlur={() => {}}
-      autoFocus
+      autoFocus={false}
       autoCorrect={false}
       autoCapitalize='none'
-      clearTextOnFocus
+      clearTextOnFocus={false}
       value={props.value}
       onChangeText={props.onChangeText}
     ></TextInputRN>

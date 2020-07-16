@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import {
   StyleSheet,
   Text,
@@ -20,27 +20,25 @@ import { observer } from 'mobx-react-lite'
 
 import { useMst } from '../../models/Root'
 
-import { Magic } from '@magic-sdk/react-native'
+import magic from '../../services/magic'
 
-import getEnvVars from '../../../env.js'
-const { MAGIC_API_KEY } = getEnvVars()
-
-const magic = new Magic(MAGIC_API_KEY, {
-  network: 'rinkeby'
-})
-console.log('magic: ', magic)
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 export default function Login ({ navigation }) {
   const [email, setEmail] = useState('')
 
   const { auth } = useMst()
 
+  const insets = useSafeAreaInsets()
+
   return (
     <KeyboardAvoidingView
       style={styles.container}
       behavior={Platform.OS === 'ios' ? 'padding' : null}
-      keyboardVerticalOffset={Platform.OS === 'ios' ? 64 : 0}
+      keyboardVerticalOffset={Platform.OS === 'ios' ? 64 + insets.bottom : 0}
     >
+      <magic.Relayer />
+
       <SafeAreaView style={styles.container}>
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <View style={styles.container}>
@@ -63,8 +61,23 @@ export default function Login ({ navigation }) {
             >
               <TouchableOpacity
                 style={styles.roundButton}
-                onPress={() => {
-                  navigation.navigate('ConfirmEmail')
+                onPress={async () => {
+                  //
+
+                  //   let user = await magic.user
+                  //   let isLoggedIn = await user.isLoggedIn()
+                  //   console.log('isLoggedIn: ', isLoggedIn)
+                  //   let token = await user.getIdToken()
+                  //   console.log('token: ', token)
+                  //   await user.logout()
+                  //   isLoggedIn = await user.isLoggedIn()
+                  //   console.log('isLoggedIn: ', isLoggedIn)
+                  //   const res = await magic.auth.loginWithMagicLink({
+                  //     email: 'amiromayer@gmail.com'
+                  //   })
+
+                  //   console.log('res: ', res)
+                  navigation.navigate('ConfirmEmail', { email })
                 }}
               >
                 <Feather
@@ -98,9 +111,9 @@ const styles = StyleSheet.create({
     color: colors.Gray500
   },
   roundButton: {
-    height: 45,
-    width: 45,
-    borderRadius: 23,
+    height: 60,
+    width: 60,
+    borderRadius: 30,
     backgroundColor: colors.White,
     justifyContent: 'center',
     alignItems: 'center',
