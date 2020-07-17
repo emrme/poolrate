@@ -29,6 +29,8 @@ const ConfirmEmail = ({ navigation, route }) => {
 
   const email = route.params?.email
 
+  const [isLoggedInMagic, setIsLoggedInMagic] = useState(false)
+  const [idToken, setIdToken] = useState('')
   const [timer, setTimer] = useState(60)
   const [canTryAgain, setCanTryAgain] = useState(false)
   const [hasTried, setHasTried] = useState(false)
@@ -52,7 +54,7 @@ const ConfirmEmail = ({ navigation, route }) => {
       setIsLoggedInMagic(isLoggedIn)
     }
 
-    checkIfLoggenInMagic()
+    checkIfLoggedInMagic()
 
     const loginWithMagicLink = async () => {
       if (!isLoggedInMagic) {
@@ -161,7 +163,7 @@ const styles = StyleSheet.create({
   },
   subtitle: {
     marginTop: 10,
-    marginHorizontal: 30,
+    marginHorizontal: 40,
     fontSize: 18,
     fontWeight: FONT_WEIGHT.REGULAR,
     color: colors.Gray500,
