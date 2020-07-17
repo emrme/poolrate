@@ -2,14 +2,14 @@ import React from 'react'
 import { createStackNavigator } from '@react-navigation/stack'
 import { Feather } from '@expo/vector-icons'
 import colors from '../constants/colors'
-import ExploreScreen from '../screens/Explore'
+import SettingsScreen from '../screens/Settings'
 
 const Stack = createStackNavigator()
 
-const ExploreStack = () => {
+const SettingsStack = () => {
   return (
     <Stack.Navigator
-      initialRouteName='Explore'
+      initialRouteName='Settings'
       screenOptions={{
         gestureEnabled: true,
         headerStyle: {
@@ -20,10 +20,10 @@ const ExploreStack = () => {
     >
       <Stack.Screen
         name='Explore'
-        component={ExploreScreen}
+        component={SettingsScreen}
         options={({ navigation, route }) => {
           return {
-            title: 'Explore'
+            title: 'Settings'
           }
         }}
       />
@@ -31,4 +31,4 @@ const ExploreStack = () => {
   )
 }
 
-export default ExploreStack
+export default SettingsStack

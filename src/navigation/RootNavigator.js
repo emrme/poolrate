@@ -27,11 +27,8 @@ const RootNavigator = () => {
     <Stack.Navigator
       initialRouteName='Home'
       screenOptions={{
-        // gestureEnabled: true,
-        headerStyle: {
-          backgroundColor: colors.Gray100,
-          shadowColor: 'transparent'
-        }
+        gestureEnabled: true,
+        headerStyle: {}
       }}
     >
       <Stack.Screen

@@ -18,7 +18,7 @@ const HomeStack = () => {
         gestureEnabled: true,
         headerStyle: {
           backgroundColor: colors.Gray100,
-          shadowColor: 'transparent'
+          shadowColor: 'red'
         }
       }}
     >
@@ -35,7 +35,8 @@ const HomeStack = () => {
             },
             headerStyle: {
               height: 64 + insets.top,
-              backgroundColor: 'transparent'
+              backgroundColor: colors.Gray100,
+              shadowColor: 'transparent'
             }
           }
         }}

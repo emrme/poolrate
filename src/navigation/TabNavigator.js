@@ -4,6 +4,7 @@ import { Feather } from '@expo/vector-icons'
 import colors from '../constants/colors'
 import HomeStack from './HomeStack'
 import ExploreStack from './ExploreStack'
+import SettingsStack from './SettingsStack'
 
 const Tab = createBottomTabNavigator()
 
@@ -18,8 +19,10 @@ const TabNavigator = ({ navigation, route }) => {
         keyboardHidesTabBar: true,
         style: { borderTopWidth: 0 },
         activeTintColor: colors.Black,
-        inactiveTintColor: colors.Gray500
+        inactiveTintColor: colors.Gray500,
+        tabStyle: { backgroundColor: colors.Gray100 }
       }}
+      barStyle={{ backgroundColor: 'red' }}
     >
       <Tab.Screen
         name='Home'
@@ -41,10 +44,10 @@ const TabNavigator = ({ navigation, route }) => {
       />
       <Tab.Screen
         name='Settings'
-        component={HomeStack}
+        component={SettingsStack}
         options={{
           tabBarIcon: ({ focused, color, size }) => {
-            return <Feather name='user' size={size} color={color} />
+            return <Feather name='settings' size={size} color={color} />
           }
         }}
       />

@@ -5,7 +5,7 @@ import colors from '../constants/colors'
 export default function Home () {
   return (
     <SafeAreaView style={styles.container}>
-      <Text>Explore Screen</Text>
+      <Text>Settings Screen</Text>
     </SafeAreaView>
   )
 }
