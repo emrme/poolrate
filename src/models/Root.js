@@ -3,16 +3,22 @@ import { types, Instance, onSnapshot } from 'mobx-state-tree'
 
 import { Auth } from './Auth'
 
-const RootModel = types.model({
-  auth: Auth,
-  name: types.string
-})
+const RootModel = types
+  .model({
+    auth: Auth,
+    isLoading: types.boolean
+  })
+  .actions(self => ({
+    setIsLoading (bool) {
+      self.isLoading = bool
+    }
+  }))
 
 export const rootStore = RootModel.create({
   auth: {
     isLoggedIn: false
   },
-  name: 'Amir'
+  isLoading: true
 })
 
 onSnapshot(rootStore, snapshot => console.log('Snapshot: ', snapshot))

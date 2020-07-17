@@ -37,7 +37,8 @@ const HomeStack = () => {
               height: 64 + insets.top,
               backgroundColor: colors.Gray100,
               shadowColor: 'transparent'
-            }
+            },
+            headerLeft: null
           }
         }}
       />

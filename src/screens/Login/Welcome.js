@@ -24,26 +24,13 @@ import magic from '../../services/magic'
 
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
-export default function Login ({ navigation }) {
+import Spinner from 'react-native-loading-spinner-overlay'
+const Login = ({ navigation }) => {
   const [email, setEmail] = useState('')
 
-  const { auth } = useMst()
+  const { auth, isLoading } = useMst()
 
   const insets = useSafeAreaInsets()
-
-  const [isLoading, setIsLoading] = useState(true)
-  console.log('isLoading: ', isLoading)
-
-  useEffect(() => {
-    const checkIfLoggenInMagic = async () => {
-      const isLoggedInMagic = await magic.user.isLoggedIn()
-      console.log('isLoggedInMagic: ', isLoggedInMagic)
-      // isLoggedInMagic && (await magic.user.logout())
-      isLoggedInMagic ? auth.login() : auth.logout()
-      setIsLoading(false)
-    }
-    checkIfLoggenInMagic()
-  }, [])
 
   return (
     <KeyboardAvoidingView
@@ -51,7 +38,7 @@ export default function Login ({ navigation }) {
       behavior={Platform.OS === 'ios' ? 'padding' : null}
       keyboardVerticalOffset={Platform.OS === 'ios' ? 64 + insets.bottom : 0}
     >
-      <magic.Relayer />
+      <Spinner visible={isLoading}></Spinner>
 
       <SafeAreaView style={styles.container}>
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -103,6 +90,8 @@ export default function Login ({ navigation }) {
     </KeyboardAvoidingView>
   )
 }
+
+export default observer(Login)
 
 const styles = StyleSheet.create({
   container: {

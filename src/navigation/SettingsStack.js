@@ -19,11 +19,12 @@ const SettingsStack = () => {
       }}
     >
       <Stack.Screen
-        name='Explore'
+        name='Settings'
         component={SettingsScreen}
         options={({ navigation, route }) => {
           return {
-            title: 'Settings'
+            title: 'Settings',
+            headerLeft: null
           }
         }}
       />

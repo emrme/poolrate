@@ -23,7 +23,8 @@ const ExploreStack = () => {
         component={ExploreScreen}
         options={({ navigation, route }) => {
           return {
-            title: 'Explore'
+            title: 'Explore',
+            headerLeft: null
           }
         }}
       />

@@ -17,71 +17,41 @@ import { useMst } from '../models/Root'
 
 import magic from '../services/magic'
 import TabNavigator from './TabNavigator'
+import AuthStack from './AuthStack'
 
 const Stack = createStackNavigator()
 
-const RootNavigator = () => {
+const RootNavigator = ({ navigation }) => {
   const { auth } = useMst()
+
+  // useEffect(() => {
+  //   auth.isLoggedIn && navigation.navigate('Home')
+  // }, [auth.isLoggedIn])
 
   return (
     <Stack.Navigator
-      initialRouteName='Home'
+      initialRouteName='Auth'
       screenOptions={{
-        gestureEnabled: true,
-        headerStyle: {}
+        gestureEnabled: false,
+        headerStyle: {
+          backgroundColor: colors.Gray100,
+          shadowColor: 'transparent'
+        }
       }}
     >
-      <Stack.Screen
-        name='Home'
-        component={TabNavigator}
-        options={{ headerShown: false }}
-      ></Stack.Screen>
-      <Stack.Screen
-        name='Login'
-        component={WelcomeScreen}
-        options={({ navigation, route }) => {
-          return {
-            headerTitle: null,
-            headerLeft: () => {
-              return (
-                <TouchableOpacity
-                  style={{ marginLeft: 16 }}
-                  onPress={() => {
-                    if (navigation.canGoBack()) {
-                      navigation.popToTop()
-                    }
-                  }}
-                >
-                  <Feather name='arrow-left' size={24} />
-                </TouchableOpacity>
-              )
-            }
-          }
-        }}
-      ></Stack.Screen>
-      <Stack.Screen
-        name='ConfirmEmail'
-        component={ConfirmEmailScreen}
-        options={({ navigation, route }) => {
-          return {
-            headerTitle: null,
-            headerLeft: () => {
-              return (
-                <TouchableOpacity
-                  style={{ marginLeft: 16 }}
-                  onPress={() => {
-                    if (navigation.canGoBack()) {
-                      navigation.popToTop()
-                    }
-                  }}
-                >
-                  <Feather name='arrow-left' size={24} />
-                </TouchableOpacity>
-              )
-            }
-          }
-        }}
-      ></Stack.Screen>
+      {auth.isLoggedIn ? (
+        <Stack.Screen
+          name='Home'
+          component={TabNavigator}
+          options={{ headerShown: false }}
+        ></Stack.Screen>
+      ) : (
+        <Stack.Screen
+          name='Auth'
+          component={AuthStack}
+          options={{ headerShown: false }}
+        ></Stack.Screen>
+      )}
     </Stack.Navigator>
   )
 }

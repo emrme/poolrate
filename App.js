@@ -7,11 +7,14 @@ import { NavigationContainer } from '@react-navigation/native'
 
 import { Provider, rootStore } from './src/models/Root'
 import colors from './src/constants/colors'
+import magic from './src/services/magic'
 
 export default function App () {
   return (
     <Provider value={rootStore}>
       <SafeAreaView style={styles.container}>
+        <StatusBar style='dark'></StatusBar>
+        <magic.Relayer />
         <NavigationContainer>
           <RootNavigator></RootNavigator>
         </NavigationContainer>
