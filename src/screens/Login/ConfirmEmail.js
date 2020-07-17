@@ -22,6 +22,7 @@ import { useMst } from '../../models/Root'
 import magic from '../../services/magic'
 
 import { RPCError, RPCErrorCode } from '@magic-sdk/react-native'
+import LottieView from 'lottie-react-native'
 
 export default function Login ({ navigation, route }) {
   const email = route.params?.email
@@ -78,12 +79,18 @@ export default function Login ({ navigation, route }) {
       >
         <Text style={styles.title}>Check your email</Text>
         <Text style={styles.subtitle}>
-          We sent a magic link to {email ? email : 'your email'}
+          We emailed a magic link to {email ? email : 'your email'}
         </Text>
-        <Text style={styles.subtitle}>Click the link to log in or sign up</Text>
+        <Text style={styles.subtitle}>Click your magic link to log in</Text>
       </View>
+
       <View style={styles.emailIcon}>
-        <Feather name='mail' size={96} color={colors.Gray200}></Feather>
+        <LottieView
+          source={require('../../../assets/email-animation.json')}
+          style={{ height: 200 }}
+          autoPlay
+          loop
+        />
       </View>
     </SafeAreaView>
   )
@@ -101,7 +108,7 @@ const styles = StyleSheet.create({
   },
   subtitle: {
     marginTop: 10,
-    marginHorizontal: 16,
+    marginHorizontal: 30,
     fontSize: 18,
     fontWeight: FONT_WEIGHT.REGULAR,
     color: colors.Gray500,

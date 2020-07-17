@@ -25,6 +25,7 @@ import magic from '../../services/magic'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 import Spinner from 'react-native-loading-spinner-overlay'
+
 const Login = ({ navigation }) => {
   const [email, setEmail] = useState('')
 
