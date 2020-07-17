@@ -49,45 +49,47 @@ const ConfirmEmail = ({ navigation, route }) => {
   }, [timer])
 
   useEffect(() => {
-    const checkIfLoggedInMagic = async () => {
-      const isLoggedIn = await magic.user.isLoggedIn()
-      setIsLoggedInMagic(isLoggedIn)
-    }
+    if (idToken.length === 0) {
+      const checkIfLoggedInMagic = async () => {
+        const isLoggedIn = await magic.user.isLoggedIn()
+        setIsLoggedInMagic(isLoggedIn)
+      }
 
-    checkIfLoggedInMagic()
+      checkIfLoggedInMagic()
 
-    const loginWithMagicLink = async () => {
-      if (!isLoggedInMagic) {
-        try {
-          let token = await magic.auth.loginWithMagicLink({
-            email: email,
-            showUI: false
-          })
-          setIdToken(token)
-          auth.login()
-        } catch (err) {
-          if (err instanceof RPCError) {
-            switch (err.code) {
-              case RPCErrorCode.MagicLinkFailedVerification:
-                console.log('MagicLinkFailedVerification')
-              case RPCErrorCode.MagicLinkExpired:
-                console.log('MagicLinkExpired')
-              case RPCErrorCode.MagicLinkRateLimited:
-                console.log('MagicLinkRateLimited')
-              case RPCErrorCode.UserAlreadyLoggedIn:
-                console.log('UserAlreadyLoggedIn')
-                break
+      const loginWithMagicLink = async () => {
+        if (!isLoggedInMagic) {
+          try {
+            let token = await magic.auth.loginWithMagicLink({
+              email: email,
+              showUI: false
+            })
+            setIdToken(token)
+            auth.login()
+          } catch (err) {
+            if (err instanceof RPCError) {
+              switch (err.code) {
+                case RPCErrorCode.MagicLinkFailedVerification:
+                  console.log('MagicLinkFailedVerification')
+                case RPCErrorCode.MagicLinkExpired:
+                  console.log('MagicLinkExpired')
+                case RPCErrorCode.MagicLinkRateLimited:
+                  console.log('MagicLinkRateLimited')
+                case RPCErrorCode.UserAlreadyLoggedIn:
+                  console.log('UserAlreadyLoggedIn')
+                  break
+              }
             }
           }
+        } else {
+          // If logged in
+          let token = await magic.user.getIdToken({})
+          setIdToken(token)
+          auth.login()
         }
-      } else {
-        // If logged in
-        let token = await magic.user.getIdToken({})
-        setIdToken(token)
-        auth.login()
       }
+      loginWithMagicLink()
     }
-    loginWithMagicLink()
   }, [idToken])
 
   return (
