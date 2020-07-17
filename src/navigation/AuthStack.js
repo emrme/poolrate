@@ -21,11 +21,12 @@ const AuthStack = ({ navigation }) => {
 
   const checkIfLoggedIn = async () => {
     const isLoggedInMagic = await magic.user.isLoggedIn()
-    rootStore.setIsLoading(false)
-
+    let idToken
     if (isLoggedInMagic) {
-      auth.login()
+      idToken = await magic.user.getIdToken()
     }
+    rootStore.setIsLoading(false)
+    if (idToken) auth.login(idToken)
   }
 
   useEffect(() => {

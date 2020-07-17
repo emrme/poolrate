@@ -25,12 +25,10 @@ import { RPCError, RPCErrorCode } from '@magic-sdk/react-native'
 import LottieView from 'lottie-react-native'
 
 const ConfirmEmail = ({ navigation, route }) => {
-  const { auth } = useMst()
+  const { auth, user } = useMst()
 
   const email = route.params?.email
 
-  const [isLoggedInMagic, setIsLoggedInMagic] = useState(false)
-  const [idToken, setIdToken] = useState('')
   const [timer, setTimer] = useState(60)
   const [canTryAgain, setCanTryAgain] = useState(false)
   const [hasTried, setHasTried] = useState(false)
@@ -49,23 +47,18 @@ const ConfirmEmail = ({ navigation, route }) => {
   }, [timer])
 
   useEffect(() => {
-    if (idToken.length === 0) {
-      const checkIfLoggedInMagic = async () => {
-        const isLoggedIn = await magic.user.isLoggedIn()
-        setIsLoggedInMagic(isLoggedIn)
-      }
-
-      checkIfLoggedInMagic()
-
+    if (user.idToken.length === 0) {
       const loginWithMagicLink = async () => {
+        const isLoggedInMagic = await magic.user.isLoggedIn()
+
         if (!isLoggedInMagic) {
           try {
-            let token = await magic.auth.loginWithMagicLink({
+            let idToken = await magic.auth.loginWithMagicLink({
               email: email,
               showUI: false
             })
-            setIdToken(token)
-            auth.login()
+
+            auth.login(idToken)
           } catch (err) {
             if (err instanceof RPCError) {
               switch (err.code) {
@@ -83,14 +76,13 @@ const ConfirmEmail = ({ navigation, route }) => {
           }
         } else {
           // If logged in
-          let token = await magic.user.getIdToken({})
-          setIdToken(token)
-          auth.login()
+          let idToken = await magic.user.getIdToken({})
+          auth.login(idToken)
         }
       }
       loginWithMagicLink()
     }
-  }, [idToken])
+  }, [user.idToken])
 
   return (
     <SafeAreaView style={styles.container}>
@@ -151,7 +143,7 @@ const ConfirmEmail = ({ navigation, route }) => {
   )
 }
 
-export default React.memo(ConfirmEmail)
+export default observer(ConfirmEmail)
 
 const styles = StyleSheet.create({
   container: {

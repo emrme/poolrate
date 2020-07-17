@@ -2,10 +2,12 @@ import { useContext, createContext } from 'react'
 import { types, Instance, onSnapshot } from 'mobx-state-tree'
 
 import { Auth } from './Auth'
+import { User } from './User'
 
 const RootModel = types
   .model({
     auth: Auth,
+    user: User,
     isLoading: types.boolean
   })
   .actions(self => ({
@@ -17,6 +19,12 @@ const RootModel = types
 export const rootStore = RootModel.create({
   auth: {
     isLoggedIn: false
+  },
+  user: {
+    email: '',
+    addresses: [],
+    selectedAddress: '',
+    idToken: ''
   },
   isLoading: true
 })

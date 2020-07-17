@@ -1,14 +1,16 @@
-import { types } from 'mobx-state-tree'
+import { types, getRoot } from 'mobx-state-tree'
 
 export const Auth = types
   .model({
-    isLoggedIn: types.boolean
+    isLoggedIn: false
   })
   .actions(self => ({
-    login () {
+    login (idToken) {
+      getRoot(self).user.setIdToken(idToken)
       self.isLoggedIn = true
     },
     logout () {
+      getRoot(self).user.selfdestruct()
       self.isLoggedIn = false
     }
   }))
