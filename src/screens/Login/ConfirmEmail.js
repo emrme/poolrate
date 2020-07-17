@@ -81,13 +81,15 @@ export default function Login ({ navigation, route }) {
         <Text style={styles.subtitle}>
           We emailed a magic link to {email ? email : 'your email'}
         </Text>
-        <Text style={styles.subtitle}>Click your magic link to log in</Text>
+        <Text style={styles.subtitle}>
+          Click it to log in and come back to this screen
+        </Text>
       </View>
 
       <View style={styles.emailIcon}>
         <LottieView
           source={require('../../../assets/email-animation.json')}
-          style={{ height: 200 }}
+          style={{ width: 180 }}
           autoPlay
           loop
         />
