@@ -23,8 +23,6 @@ const AuthStack = ({ navigation }) => {
     const isLoggedInMagic = await magic.user.isLoggedIn()
     rootStore.setIsLoading(false)
 
-    // isLoggedInMagic && (await magic.user.logout())
-
     if (isLoggedInMagic) {
       auth.login()
     }
@@ -33,10 +31,6 @@ const AuthStack = ({ navigation }) => {
   useEffect(() => {
     checkIfLoggedIn()
   }, [isFocused])
-
-  // useEffect(() => {
-  //   auth.isLoggedIn && navigation.navigate('Home')
-  // }, [auth.isLoggedIn])
 
   return (
     <Stack.Navigator

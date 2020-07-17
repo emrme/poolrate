@@ -25,17 +25,13 @@ import { RPCError, RPCErrorCode } from '@magic-sdk/react-native'
 import LottieView from 'lottie-react-native'
 
 const ConfirmEmail = ({ navigation, route }) => {
-  const email = route.params?.email
+  const { auth } = useMst()
 
-  const [idToken, setIdToken] = useState('')
-  console.log('idToken: ', idToken)
-  const [isLoggedInMagic, setIsLoggedInMagic] = useState(false)
+  const email = route.params?.email
 
   const [timer, setTimer] = useState(60)
   const [canTryAgain, setCanTryAgain] = useState(false)
   const [hasTried, setHasTried] = useState(false)
-
-  const { auth } = useMst()
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -51,10 +47,11 @@ const ConfirmEmail = ({ navigation, route }) => {
   }, [timer])
 
   useEffect(() => {
-    const checkIfLoggenInMagic = async () => {
+    const checkIfLoggedInMagic = async () => {
       const isLoggedIn = await magic.user.isLoggedIn()
       setIsLoggedInMagic(isLoggedIn)
     }
+
     checkIfLoggenInMagic()
 
     const loginWithMagicLink = async () => {
@@ -69,20 +66,23 @@ const ConfirmEmail = ({ navigation, route }) => {
         } catch (err) {
           if (err instanceof RPCError) {
             switch (err.code) {
-              case RPCErrorCode.MagicLinkFailedVerification: {
-                console.log(err)
-              }
+              case RPCErrorCode.MagicLinkFailedVerification:
+                console.log('MagicLinkFailedVerification')
               case RPCErrorCode.MagicLinkExpired:
-                console.log(err)
+                console.log('MagicLinkExpired')
               case RPCErrorCode.MagicLinkRateLimited:
-                console.log(err)
+                console.log('MagicLinkRateLimited')
               case RPCErrorCode.UserAlreadyLoggedIn:
-                console.log(err)
-                // Handle errors accordingly :)
+                console.log('UserAlreadyLoggedIn')
                 break
             }
           }
         }
+      } else {
+        // If logged in
+        let token = await magic.user.getIdToken({})
+        setIdToken(token)
+        auth.login()
       }
     }
     loginWithMagicLink()
