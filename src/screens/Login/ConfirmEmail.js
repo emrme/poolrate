@@ -19,22 +19,55 @@ import TextInput from '../../components/TextInput'
 import { observer } from 'mobx-react-lite'
 
 import { useMst } from '../../models/Root'
+import magic from '../../services/magic'
 
-import { Magic } from '@magic-sdk/react-native'
-
-import getEnvVars from '../../../env.js'
-const { MAGIC_API_KEY } = getEnvVars()
-
-const magic = new Magic(MAGIC_API_KEY, {
-  network: 'rinkeby'
-})
-
-magic.preload().then(() => console.log('Magic <iframe> loaded.'))
+import { RPCError, RPCErrorCode } from '@magic-sdk/react-native'
 
 export default function Login ({ navigation, route }) {
   const email = route.params?.email
 
+  const [idToken, setIdToken] = useState('')
+  const [isLoggedInMagic, setIsLoggedInMagic] = useState(false)
+
   const { auth } = useMst()
+
+  useEffect(() => {
+    const checkIfLoggenInMagic = async () => {
+      const isLoggedIn = await magic.user.isLoggedIn()
+      setIsLoggedInMagic(isLoggedIn)
+    }
+    checkIfLoggenInMagic()
+
+    const loginWithMagicLink = async () => {
+      if (!isLoggedInMagic) {
+        try {
+          let token = await magic.auth.loginWithMagicLink({
+            email: email,
+            showUI: false
+          })
+          setIdToken(token)
+          auth.login()
+        } catch (err) {
+          if (err instanceof RPCError) {
+            switch (err.code) {
+              case RPCErrorCode.MagicLinkFailedVerification: {
+                console.log(err)
+              }
+              case RPCErrorCode.MagicLinkExpired:
+                console.log(err)
+              case RPCErrorCode.MagicLinkRateLimited:
+                console.log(err)
+              case RPCErrorCode.UserAlreadyLoggedIn:
+                console.log(err)
+                // Handle errors accordingly :)
+                break
+            }
+          }
+        }
+      }
+    }
+    loginWithMagicLink()
+  }, [idToken])
 
   return (
     <SafeAreaView style={styles.container}>
@@ -49,15 +82,7 @@ export default function Login ({ navigation, route }) {
         </Text>
         <Text style={styles.subtitle}>Click the link to log in or sign up</Text>
       </View>
-      <View
-        style={{
-          position: 'absolute',
-          justifyContent: 'center',
-          alignItems: 'center',
-          height: '100%',
-          width: '100%'
-        }}
-      >
+      <View style={styles.emailIcon}>
         <Feather name='mail' size={96} color={colors.Gray200}></Feather>
       </View>
     </SafeAreaView>
@@ -67,8 +92,7 @@ export default function Login ({ navigation, route }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.Gray100,
-    textAlign: 'center'
+    backgroundColor: colors.Gray100
   },
   title: {
     marginTop: 20,
@@ -82,5 +106,12 @@ const styles = StyleSheet.create({
     fontWeight: FONT_WEIGHT.REGULAR,
     color: colors.Gray500,
     textAlign: 'center'
+  },
+  emailIcon: {
+    position: 'absolute',
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: '100%',
+    width: '100%'
   }
 })

@@ -31,6 +31,20 @@ export default function Login ({ navigation }) {
 
   const insets = useSafeAreaInsets()
 
+  const [isLoading, setIsLoading] = useState(true)
+  console.log('isLoading: ', isLoading)
+
+  useEffect(() => {
+    const checkIfLoggenInMagic = async () => {
+      const isLoggedInMagic = await magic.user.isLoggedIn()
+      console.log('isLoggedInMagic: ', isLoggedInMagic)
+      // isLoggedInMagic && (await magic.user.logout())
+      isLoggedInMagic ? auth.login() : auth.logout()
+      setIsLoading(false)
+    }
+    checkIfLoggenInMagic()
+  }, [])
+
   return (
     <KeyboardAvoidingView
       style={styles.container}
@@ -72,11 +86,7 @@ export default function Login ({ navigation }) {
                   //   await user.logout()
                   //   isLoggedIn = await user.isLoggedIn()
                   //   console.log('isLoggedIn: ', isLoggedIn)
-                  //   const res = await magic.auth.loginWithMagicLink({
-                  //     email: 'amiromayer@gmail.com'
-                  //   })
 
-                  //   console.log('res: ', res)
                   navigation.navigate('ConfirmEmail', { email })
                 }}
               >
@@ -106,9 +116,11 @@ const styles = StyleSheet.create({
   },
   subtitle: {
     marginTop: 10,
+    marginHorizontal: 16,
     fontSize: 18,
     fontWeight: FONT_WEIGHT.REGULAR,
-    color: colors.Gray500
+    color: colors.Gray500,
+    textAlign: 'center'
   },
   roundButton: {
     height: 60,

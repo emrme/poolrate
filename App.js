@@ -1,15 +1,18 @@
+import 'mobx-react-lite/batchingForReactNative'
 import { StatusBar } from 'expo-status-bar'
 import React from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 import RootNavigator from './src/navigation/RootNavigator'
-import 'mobx-react-lite/batchingForReactNative'
+import { NavigationContainer } from '@react-navigation/native'
 
 import { Provider, rootStore } from './src/models/Root'
 
 export default function App () {
   return (
     <Provider value={rootStore}>
-      <RootNavigator></RootNavigator>
+      <NavigationContainer>
+        <RootNavigator></RootNavigator>
+      </NavigationContainer>
     </Provider>
   )
 }
