@@ -8,7 +8,8 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
   Platform,
-  SafeAreaView
+  SafeAreaView,
+  Dimensions
 } from 'react-native'
 import { FONT_WEIGHT } from '../../constants/fonts'
 import colors from '../../constants/colors'
@@ -26,6 +27,8 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 import Spinner from 'react-native-loading-spinner-overlay'
 
+const screen = Dimensions.get('screen')
+
 const Login = ({ navigation }) => {
   const [email, setEmail] = useState('')
 
@@ -37,7 +40,9 @@ const Login = ({ navigation }) => {
     <KeyboardAvoidingView
       style={styles.container}
       behavior={Platform.OS === 'ios' ? 'padding' : null}
-      keyboardVerticalOffset={Platform.OS === 'ios' ? 64 + insets.bottom : 0}
+      keyboardVerticalOffset={
+        Platform.OS === 'ios' ? (screen.height > 700 ? 64 + 28 : 64) : 0
+      }
     >
       <Spinner visible={isLoading}></Spinner>
 

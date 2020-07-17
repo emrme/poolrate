@@ -17,6 +17,7 @@ export default function App () {
       <NavigationContainer>
         <RootNavigator></RootNavigator>
       </NavigationContainer>
+      <SafeAreaView style={{ backgroundColor: colors.Gray100 }}></SafeAreaView>
     </Provider>
   )
 }

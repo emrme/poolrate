@@ -24,13 +24,31 @@ import magic from '../../services/magic'
 import { RPCError, RPCErrorCode } from '@magic-sdk/react-native'
 import LottieView from 'lottie-react-native'
 
-export default function Login ({ navigation, route }) {
+const ConfirmEmail = ({ navigation, route }) => {
   const email = route.params?.email
 
   const [idToken, setIdToken] = useState('')
+  console.log('idToken: ', idToken)
   const [isLoggedInMagic, setIsLoggedInMagic] = useState(false)
 
+  const [timer, setTimer] = useState(60)
+  const [canTryAgain, setCanTryAgain] = useState(false)
+  const [hasTried, setHasTried] = useState(false)
+
   const { auth } = useMst()
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      timer > 0 && setTimer(timer => timer - 1)
+    }, 1000)
+
+    if (timer === 0) {
+      clearInterval(interval)
+      setCanTryAgain(true)
+    }
+
+    return () => clearInterval(interval)
+  }, [timer])
 
   useEffect(() => {
     const checkIfLoggenInMagic = async () => {
@@ -89,14 +107,47 @@ export default function Login ({ navigation, route }) {
       <View style={styles.emailIcon}>
         <LottieView
           source={require('../../../assets/email-animation.json')}
-          style={{ width: 180 }}
+          style={{ width: 240 }}
           autoPlay
           loop
         />
       </View>
+
+      <View
+        style={{
+          position: 'absolute',
+          justifyContent: 'center',
+          alignItems: 'center',
+          bottom: 40,
+          width: '100%'
+        }}
+      >
+        {!hasTried && <Text style={styles.subtitle}>Didn't get an email?</Text>}
+        {!hasTried &&
+          (!canTryAgain ? (
+            <Text style={styles.subtitle}>Try again in {timer}s</Text>
+          ) : (
+            <TouchableOpacity
+              onPress={() => {
+                setHasTried(true)
+              }}
+            >
+              <Text
+                style={[
+                  styles.subtitle,
+                  { color: colors.Black, fontWeight: FONT_WEIGHT.MEDIUM }
+                ]}
+              >
+                Try again
+              </Text>
+            </TouchableOpacity>
+          ))}
+      </View>
     </SafeAreaView>
   )
 }
+
+export default React.memo(ConfirmEmail)
 
 const styles = StyleSheet.create({
   container: {

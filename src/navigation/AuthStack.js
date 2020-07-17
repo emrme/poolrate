@@ -42,6 +42,7 @@ const AuthStack = ({ navigation }) => {
     <Stack.Navigator
       initialRouteName='Login'
       screenOptions={{
+        gestureEnabled: false,
         headerTitle: null,
         headerStyle: {
           backgroundColor: colors.Gray100,
