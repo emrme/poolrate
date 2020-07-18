@@ -29,7 +29,7 @@ import Spinner from 'react-native-loading-spinner-overlay'
 
 const screen = Dimensions.get('screen')
 
-const Login = ({ navigation }) => {
+const Welcome = ({ navigation }) => {
   const [email, setEmail] = useState('')
 
   const { auth, user, isLoading } = useMst()
@@ -86,7 +86,7 @@ const Login = ({ navigation }) => {
   )
 }
 
-export default observer(Login)
+export default observer(Welcome)
 
 const styles = StyleSheet.create({
   container: {

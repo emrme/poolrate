@@ -35,7 +35,7 @@ export const rootStore = RootModel.create({
     selectedAddress: '',
     idToken: ''
   },
-  isLoading: true
+  isLoading: false
 })
 
 onSnapshot(rootStore, snapshot => console.log('Snapshot: ', snapshot))

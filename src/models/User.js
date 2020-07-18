@@ -37,12 +37,14 @@ export const User = types
     },
     checkIfLoggedIn: flow(function * checkIfLoggedIn () {
       try {
+        getRoot(self).setIsLoading(true)
         const isLoggedIn = yield magic.user.isLoggedIn()
+
         if (isLoggedIn) {
           const idToken = yield magic.user.getIdToken()
-          getRoot(self).setIsLoading(false)
-          // if (idToken) getRoot(self).auth.login(idToken)
+          if (idToken) getRoot(self).auth.login(idToken)
         }
+        getRoot(self).setIsLoading(false)
       } catch (error) {
         console.error('Failed to check if user is logged in magic', error)
       }

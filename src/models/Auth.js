@@ -10,8 +10,10 @@ export const Auth = types
       self.isLoggedIn = true
     },
     logout () {
+      getRoot(self).setIsLoading(true)
       getRoot(self).user.reset()
       self.reset()
+      getRoot(self).setIsLoading(false)
     },
     reset () {
       applySnapshot(self, {})

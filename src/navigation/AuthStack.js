@@ -8,14 +8,13 @@ import WelcomeScreen from '../screens/Login/Welcome'
 import ConfirmEmailScreen from '../screens/Login/ConfirmEmail'
 import Onboarding from '../screens/Onboarding'
 import { useMst } from '../models/Root'
-import { useFocusEffect } from '@react-navigation/native'
 
 const Stack = createStackNavigator()
 
 const AuthStack = ({ navigation }) => {
   const { user, showOnboarding } = useMst()
 
-  useFocusEffect(() => {
+  useEffect(() => {
     user.checkIfLoggedIn()
   }, [])
 

@@ -25,7 +25,7 @@ import { RPCError, RPCErrorCode } from '@magic-sdk/react-native'
 import LottieView from 'lottie-react-native'
 
 const ConfirmEmail = ({ navigation, route }) => {
-  const { auth, user } = useMst()
+  const { auth } = useMst()
 
   const email = route.params?.email
 
@@ -47,42 +47,33 @@ const ConfirmEmail = ({ navigation, route }) => {
   }, [timer])
 
   useEffect(() => {
-    if (user.idToken.length === 0) {
+    if (!auth.isLoggedIn) {
       const loginWithMagicLink = async () => {
-        const isLoggedInMagic = await magic.user.isLoggedIn()
-
-        if (!isLoggedInMagic) {
-          try {
-            let idToken = await magic.auth.loginWithMagicLink({
-              email: email,
-              showUI: false
-            })
-
-            auth.login(idToken)
-          } catch (err) {
-            if (err instanceof RPCError) {
-              switch (err.code) {
-                case RPCErrorCode.MagicLinkFailedVerification:
-                  console.log('MagicLinkFailedVerification')
-                case RPCErrorCode.MagicLinkExpired:
-                  console.log('MagicLinkExpired')
-                case RPCErrorCode.MagicLinkRateLimited:
-                  console.log('MagicLinkRateLimited')
-                case RPCErrorCode.UserAlreadyLoggedIn:
-                  console.log('UserAlreadyLoggedIn')
-                  break
-              }
+        try {
+          let idToken = await magic.auth.loginWithMagicLink({
+            email: email,
+            showUI: false
+          })
+          auth.login(idToken)
+        } catch (err) {
+          if (err instanceof RPCError) {
+            switch (err.code) {
+              case RPCErrorCode.MagicLinkFailedVerification:
+                console.log('MagicLinkFailedVerification')
+              case RPCErrorCode.MagicLinkExpired:
+                console.log('MagicLinkExpired')
+              case RPCErrorCode.MagicLinkRateLimited:
+                console.log('MagicLinkRateLimited')
+              case RPCErrorCode.UserAlreadyLoggedIn:
+                console.log('UserAlreadyLoggedIn')
+                break
             }
           }
-        } else {
-          // If logged in
-          let idToken = await magic.user.getIdToken({})
-          auth.login(idToken)
         }
       }
       loginWithMagicLink()
     }
-  }, [user.idToken])
+  }, [auth.isLoggedIn])
 
   return (
     <SafeAreaView style={styles.container}>

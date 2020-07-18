@@ -22,7 +22,7 @@ const Settings = () => {
       <Button
         title='Log out'
         onPress={async () => {
-          // await magic.user.logout()
+          await magic.user.logout()
           auth.logout()
         }}
       ></Button>
