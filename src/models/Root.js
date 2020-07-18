@@ -8,11 +8,15 @@ const RootModel = types
   .model({
     auth: Auth,
     user: User,
-    isLoading: types.boolean
+    isLoading: types.boolean,
+    showOnboarding: true
   })
   .actions(self => ({
     setIsLoading (bool) {
       self.isLoading = bool
+    },
+    toggleShowOnboarding () {
+      self.showOnboarding = !self.showOnboarding
     },
     reset () {
       Object.keys(self).forEach(key => {

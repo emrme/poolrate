@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { NavigationContainer } from '@react-navigation/native'
+import { NavigationContainer, useFocusEffect } from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack'
 import { View, Text, TouchableOpacity, ActivityIndicator } from 'react-native'
 
@@ -19,15 +19,16 @@ import magic from '../services/magic'
 import TabNavigator from './TabNavigator'
 import AuthStack from './AuthStack'
 import Onboarding from '../screens/Onboarding'
+import * as SplashScreen from 'expo-splash-screen'
 
 const Stack = createStackNavigator()
 
 const RootNavigator = ({ navigation }) => {
-  const { auth } = useMst()
+  const { auth, showOnboarding, isLoading } = useMst()
 
   return (
     <Stack.Navigator
-      initialRouteName='Auth'
+      initialRouteName='Onboarding'
       screenOptions={{
         gestureEnabled: false,
         headerStyle: {
@@ -36,11 +37,27 @@ const RootNavigator = ({ navigation }) => {
         }
       }}
     >
-      <Stack.Screen
-        name='Onboarding'
-        component={Onboarding}
-        options={{ headerShown: false }}
-      ></Stack.Screen>
+      {showOnboarding && (
+        <Stack.Screen
+          name='Onboarding'
+          component={Onboarding}
+          options={{ headerShown: false }}
+        ></Stack.Screen>
+      )}
+
+      {!auth.isLoggedIn ? (
+        <Stack.Screen
+          name='Auth'
+          component={AuthStack}
+          options={{ headerShown: false }}
+        ></Stack.Screen>
+      ) : (
+        <Stack.Screen
+          name='Home'
+          component={TabNavigator}
+          options={{ headerShown: false }}
+        ></Stack.Screen>
+      )}
     </Stack.Navigator>
   )
 }

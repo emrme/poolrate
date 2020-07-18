@@ -6,33 +6,10 @@ import { observer } from 'mobx-react-lite'
 import colors from '../constants/colors'
 import WelcomeScreen from '../screens/Login/Welcome'
 import ConfirmEmailScreen from '../screens/Login/ConfirmEmail'
-import { useIsFocused } from '@react-navigation/native'
-
-import { rootStore, useMst } from '../models/Root'
-
-import magic from '../services/magic'
 
 const Stack = createStackNavigator()
 
 const AuthStack = ({ navigation }) => {
-  const isFocused = useIsFocused()
-
-  const { auth } = useMst()
-
-  const checkIfLoggedIn = async () => {
-    const isLoggedInMagic = await magic.user.isLoggedIn()
-    let idToken
-    if (isLoggedInMagic) {
-      idToken = await magic.user.getIdToken()
-    }
-    rootStore.setIsLoading(false)
-    if (idToken) auth.login(idToken)
-  }
-
-  useEffect(() => {
-    checkIfLoggedIn()
-  }, [isFocused])
-
   return (
     <Stack.Navigator
       initialRouteName='Login'

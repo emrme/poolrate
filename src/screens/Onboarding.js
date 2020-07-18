@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import {
   View,
   Text,
@@ -13,13 +13,23 @@ import Swiper from 'react-native-swiper'
 import colors from '../constants/colors'
 import { FONT_WEIGHT } from '../constants/fonts'
 import Logo from '../components/Logo'
+import { AppLoading } from 'expo'
+
+import { useFocusEffect } from '@react-navigation/native'
+
+import { rootStore, useMst } from '../models/Root'
+
+import magic from '../services/magic'
+
+import * as SplashScreen from 'expo-splash-screen'
+import { observer } from 'mobx-react-lite'
 
 const data = [
   {
     title: 'Discover best liquidity pools'
   },
   {
-    title: 'Analyze and track your portfolio performance'
+    title: 'Analyze and track your\nportfolio performance'
   },
   {
     title: 'Get notified of new opportunities'
@@ -28,13 +38,34 @@ const data = [
 
 const screen = Dimensions.get('screen')
 
-export default function Onboarding () {
+const Onboarding = () => {
+  const { auth, showOnboarding, isLoading } = useMst()
+  const [idToken, setIdToken] = useState('')
+
+  const checkIfLoggedIn = async () => {
+    const isLoggedInMagic = await magic.user.isLoggedIn()
+    isLoggedInMagic && setIdToken(await magic.user.getIdToken())
+  }
+
   const _renderItem = ({ item, i }) => {
     return (
       <View style={styles.slide} key={i}>
         <Logo></Logo>
         <Text style={styles.title}>{item.title}</Text>
       </View>
+    )
+  }
+
+  if (rootStore.isLoading) {
+    return (
+      <AppLoading
+        startAsync={checkIfLoggedIn}
+        onFinish={() => {
+          rootStore.setIsLoading(false)
+          if (idToken) auth.login(idToken)
+        }}
+        onError={console.warn}
+      />
     )
   }
 
@@ -76,6 +107,9 @@ export default function Onboarding () {
             shadowRadius: 10,
             shadowOffset: { width: 5, height: 10 }
           }}
+          onPress={() => {
+            rootStore.toggleShowOnboarding()
+          }}
         >
           <Text style={{ fontSize: 18, fontWeight: FONT_WEIGHT.MEDIUM }}>
             Get started
@@ -85,6 +119,8 @@ export default function Onboarding () {
     </View>
   )
 }
+
+export default observer(Onboarding)
 
 const styles = StyleSheet.create({
   container: {
