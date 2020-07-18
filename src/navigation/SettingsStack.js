@@ -3,6 +3,7 @@ import { createStackNavigator } from '@react-navigation/stack'
 import { Feather } from '@expo/vector-icons'
 import colors from '../constants/colors'
 import SettingsScreen from '../screens/Settings'
+import { observer } from 'mobx-react-lite'
 
 const Stack = createStackNavigator()
 
@@ -32,4 +33,4 @@ const SettingsStack = () => {
   )
 }
 
-export default SettingsStack
+export default observer(SettingsStack)

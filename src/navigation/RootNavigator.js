@@ -18,15 +18,12 @@ import { useMst } from '../models/Root'
 import magic from '../services/magic'
 import TabNavigator from './TabNavigator'
 import AuthStack from './AuthStack'
+import Onboarding from '../screens/Onboarding'
 
 const Stack = createStackNavigator()
 
 const RootNavigator = ({ navigation }) => {
   const { auth } = useMst()
-
-  // useEffect(() => {
-  //   auth.isLoggedIn && navigation.navigate('Home')
-  // }, [auth.isLoggedIn])
 
   return (
     <Stack.Navigator
@@ -39,19 +36,11 @@ const RootNavigator = ({ navigation }) => {
         }
       }}
     >
-      {auth.isLoggedIn ? (
-        <Stack.Screen
-          name='Home'
-          component={TabNavigator}
-          options={{ headerShown: false }}
-        ></Stack.Screen>
-      ) : (
-        <Stack.Screen
-          name='Auth'
-          component={AuthStack}
-          options={{ headerShown: false }}
-        ></Stack.Screen>
-      )}
+      <Stack.Screen
+        name='Onboarding'
+        component={Onboarding}
+        options={{ headerShown: false }}
+      ></Stack.Screen>
     </Stack.Navigator>
   )
 }

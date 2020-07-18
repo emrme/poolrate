@@ -1,5 +1,6 @@
-import { types, flow } from 'mobx-state-tree'
+import { types, flow, destroy, applySnapshot } from 'mobx-state-tree'
 import magic from '../services/magic'
+import { nanoid } from 'nanoid/async/index.native'
 
 export const Address = types.model({
   address: types.identifier,
@@ -10,7 +11,7 @@ export const User = types
   .model({
     email: '',
     addresses: types.map(Address),
-    selectedAddress: types.maybeNull(types.reference(Address)),
+    selectedAddress: types.optional(types.reference(Address), ''),
     idToken: ''
   })
   .actions(self => ({
@@ -23,16 +24,19 @@ export const User = types
         if (self.idToken.length > 0) {
           const { email, publicAddress } = yield magic.user.getMetadata()
           self.email = email
-          self.addresses.put({ address: publicAddress })
+          self.addAddress(publicAddress, 'Magic')
         }
       } catch (error) {
         console.error('Failed to fetch user metadata', error)
       }
     }),
-    selfdestruct () {
-      self.email = ''
-      self.addresses = []
-      self.selectedAddress = ''
-      self.idToken = ''
+    addAddress (address, label = '') {
+      self.addresses.put({
+        address: address,
+        label: label
+      })
+    },
+    reset () {
+      applySnapshot(self, {})
     }
   }))

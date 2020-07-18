@@ -13,6 +13,11 @@ const RootModel = types
   .actions(self => ({
     setIsLoading (bool) {
       self.isLoading = bool
+    },
+    reset () {
+      Object.keys(self).forEach(key => {
+        self[key].reset && self[key].reset()
+      })
     }
   }))
 
@@ -23,7 +28,7 @@ export const rootStore = RootModel.create({
   user: {
     email: '',
     addresses: {},
-    selectedAddress: null,
+    selectedAddress: '',
     idToken: ''
   },
   isLoading: true

@@ -1,4 +1,4 @@
-import { types, getRoot } from 'mobx-state-tree'
+import { types, getRoot, applySnapshot } from 'mobx-state-tree'
 
 export const Auth = types
   .model({
@@ -10,7 +10,10 @@ export const Auth = types
       self.isLoggedIn = true
     },
     logout () {
-      getRoot(self).user.selfdestruct()
-      self.isLoggedIn = false
+      getRoot(self).user.reset()
+      self.reset()
+    },
+    reset () {
+      applySnapshot(self, {})
     }
   }))

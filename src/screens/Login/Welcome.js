@@ -32,7 +32,7 @@ const screen = Dimensions.get('screen')
 const Login = ({ navigation }) => {
   const [email, setEmail] = useState('')
 
-  const { auth, isLoading } = useMst()
+  const { auth, user, isLoading } = useMst()
 
   const insets = useSafeAreaInsets()
 
@@ -69,17 +69,6 @@ const Login = ({ navigation }) => {
               <TouchableOpacity
                 style={styles.roundButton}
                 onPress={async () => {
-                  //
-
-                  //   let user = await magic.user
-                  //   let isLoggedIn = await user.isLoggedIn()
-                  //   console.log('isLoggedIn: ', isLoggedIn)
-                  //   let token = await user.getIdToken()
-                  //   console.log('token: ', token)
-                  //   await user.logout()
-                  //   isLoggedIn = await user.isLoggedIn()
-                  //   console.log('isLoggedIn: ', isLoggedIn)
-
                   navigation.navigate('ConfirmEmail', { email })
                 }}
               >

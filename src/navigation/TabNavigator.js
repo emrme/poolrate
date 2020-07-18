@@ -5,6 +5,7 @@ import colors from '../constants/colors'
 import HomeStack from './HomeStack'
 import ExploreStack from './ExploreStack'
 import SettingsStack from './SettingsStack'
+import { observer } from 'mobx-react-lite'
 
 const Tab = createBottomTabNavigator()
 
@@ -55,4 +56,4 @@ const TabNavigator = ({ navigation, route }) => {
   )
 }
 
-export default TabNavigator
+export default observer(TabNavigator)

@@ -3,6 +3,7 @@ import { createStackNavigator } from '@react-navigation/stack'
 import { Feather } from '@expo/vector-icons'
 import colors from '../constants/colors'
 import HomeScreen from '../screens/Home'
+import Onboarding from '../screens/Onboarding'
 
 const Stack = createStackNavigator()
 
