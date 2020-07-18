@@ -22,8 +22,8 @@ export const rootStore = RootModel.create({
   },
   user: {
     email: '',
-    addresses: [],
-    selectedAddress: '',
+    addresses: {},
+    selectedAddress: null,
     idToken: ''
   },
   isLoading: true

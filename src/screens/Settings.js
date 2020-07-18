@@ -3,11 +3,14 @@ import { StyleSheet, Text, View, SafeAreaView, Button } from 'react-native'
 import colors from '../constants/colors'
 import magic from '../services/magic'
 import { useMst } from '../models/Root'
+import { observer } from 'mobx-react-lite'
 
-export default function Home () {
-  const { auth, isLoading } = useMst()
+const Settings = () => {
+  const { auth, user, sLoading } = useMst()
   return (
     <SafeAreaView style={styles.container}>
+      <Text>{user.email}</Text>
+      <Text>{user.publicAddress}</Text>
       <Button
         title='Log out'
         onPress={async () => {
@@ -18,6 +21,8 @@ export default function Home () {
     </SafeAreaView>
   )
 }
+
+export default observer(Settings)
 
 const styles = StyleSheet.create({
   container: {

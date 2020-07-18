@@ -1,11 +1,16 @@
 import { types, flow } from 'mobx-state-tree'
 import magic from '../services/magic'
 
+export const Address = types.model({
+  address: types.identifier,
+  label: ''
+})
+
 export const User = types
   .model({
     email: '',
-    addresses: types.optional(types.array(types.string), []),
-    selectedAddress: '',
+    addresses: types.map(Address),
+    selectedAddress: types.maybeNull(types.reference(Address)),
     idToken: ''
   })
   .actions(self => ({
@@ -18,11 +23,10 @@ export const User = types
         if (self.idToken.length > 0) {
           const { email, publicAddress } = yield magic.user.getMetadata()
           self.email = email
-          self.addresses.indexOf(publicAddress) === -1 &&
-            self.addresses.push(publicAddress)
+          self.addresses.put({ address: publicAddress })
         }
       } catch (error) {
-        console.error('Failed', error)
+        console.error('Failed to fetch user metadata', error)
       }
     }),
     selfdestruct () {
