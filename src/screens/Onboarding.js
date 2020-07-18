@@ -13,15 +13,11 @@ import Swiper from 'react-native-swiper'
 import colors from '../constants/colors'
 import { FONT_WEIGHT } from '../constants/fonts'
 import Logo from '../components/Logo'
-import { AppLoading } from 'expo'
 
-import { useFocusEffect } from '@react-navigation/native'
-
-import { rootStore, useMst } from '../models/Root'
+import { useMst, rootStore } from '../models/Root'
 
 import magic from '../services/magic'
 
-import * as SplashScreen from 'expo-splash-screen'
 import { observer } from 'mobx-react-lite'
 
 const data = [
@@ -39,33 +35,12 @@ const data = [
 const screen = Dimensions.get('screen')
 
 const Onboarding = () => {
-  const { auth, showOnboarding, isLoading } = useMst()
-  const [idToken, setIdToken] = useState('')
-
-  const checkIfLoggedIn = async () => {
-    const isLoggedInMagic = await magic.user.isLoggedIn()
-    isLoggedInMagic && setIdToken(await magic.user.getIdToken())
-  }
-
   const _renderItem = ({ item, i }) => {
     return (
       <View style={styles.slide} key={i}>
         <Logo></Logo>
         <Text style={styles.title}>{item.title}</Text>
       </View>
-    )
-  }
-
-  if (rootStore.isLoading) {
-    return (
-      <AppLoading
-        startAsync={checkIfLoggedIn}
-        onFinish={() => {
-          rootStore.setIsLoading(false)
-          if (idToken) auth.login(idToken)
-        }}
-        onError={console.warn}
-      />
     )
   }
 
@@ -98,7 +73,6 @@ const Onboarding = () => {
             marginBottom: 60,
             marginHorizontal: 16,
             backgroundColor: colors.White,
-
             justifyContent: 'center',
             alignItems: 'center',
             shadowColor: colors.Gray500,

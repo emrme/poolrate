@@ -18,17 +18,15 @@ import { useMst } from '../models/Root'
 import magic from '../services/magic'
 import TabNavigator from './TabNavigator'
 import AuthStack from './AuthStack'
-import Onboarding from '../screens/Onboarding'
-import * as SplashScreen from 'expo-splash-screen'
 
 const Stack = createStackNavigator()
 
 const RootNavigator = ({ navigation }) => {
-  const { auth, showOnboarding, isLoading } = useMst()
+  const { auth } = useMst()
 
   return (
     <Stack.Navigator
-      initialRouteName='Onboarding'
+      initialRouteName='Auth'
       screenOptions={{
         gestureEnabled: false,
         headerStyle: {
@@ -37,14 +35,6 @@ const RootNavigator = ({ navigation }) => {
         }
       }}
     >
-      {showOnboarding && (
-        <Stack.Screen
-          name='Onboarding'
-          component={Onboarding}
-          options={{ headerShown: false }}
-        ></Stack.Screen>
-      )}
-
       {!auth.isLoggedIn ? (
         <Stack.Screen
           name='Auth'

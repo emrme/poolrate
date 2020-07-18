@@ -6,36 +6,57 @@ import { observer } from 'mobx-react-lite'
 import colors from '../constants/colors'
 import WelcomeScreen from '../screens/Login/Welcome'
 import ConfirmEmailScreen from '../screens/Login/ConfirmEmail'
+import Onboarding from '../screens/Onboarding'
+import { useMst } from '../models/Root'
+import { useFocusEffect } from '@react-navigation/native'
 
 const Stack = createStackNavigator()
 
 const AuthStack = ({ navigation }) => {
+  const { user, showOnboarding } = useMst()
+
+  useFocusEffect(() => {
+    user.checkIfLoggedIn()
+  }, [])
+
   return (
     <Stack.Navigator
-      initialRouteName='Login'
+      initialRouteName='Onboarding'
       screenOptions={{
         gestureEnabled: false,
         headerTitle: null,
         headerStyle: {
           backgroundColor: colors.Gray100,
           shadowColor: 'transparent'
-        },
-        headerLeft: ({ canGoBack }) => {
-          return (
-            <TouchableOpacity
-              style={{ marginLeft: 16 }}
-              onPress={() => {
-                canGoBack && navigation.goBack()
-              }}
-            >
-              <Feather name='arrow-left' size={24} />
-            </TouchableOpacity>
-          )
         }
       }}
     >
+      {showOnboarding && (
+        <Stack.Screen
+          name='Onboarding'
+          component={Onboarding}
+          options={{ headerShown: false }}
+        ></Stack.Screen>
+      )}
       <Stack.Screen name='Login' component={WelcomeScreen} />
-      <Stack.Screen name='ConfirmEmail' component={ConfirmEmailScreen} />
+      <Stack.Screen
+        name='ConfirmEmail'
+        component={ConfirmEmailScreen}
+        options={{
+          headerLeft: ({ canGoBack }) => {
+            return (
+              <TouchableOpacity
+                style={{ marginLeft: 16 }}
+                onPress={() => {
+                  canGoBack && navigation.goBack()
+                }}
+              >
+                <Feather name='arrow-left' size={24} />
+              </TouchableOpacity>
+            )
+          }
+        }}
+      />
     </Stack.Navigator>
   )
 }
